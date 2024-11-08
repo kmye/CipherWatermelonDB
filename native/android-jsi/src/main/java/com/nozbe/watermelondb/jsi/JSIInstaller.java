@@ -1,8 +1,8 @@
 package com.nozbe.watermelondb.jsi;
 
 import android.content.Context;
-public class JSIInstaller {
-    public static void install(Context context, long javaScriptContextHolder) {
+class JSIInstaller {
+    static void install(Context context, long javaScriptContextHolder) {
         JSIInstaller.context = context;
         new JSIInstaller().installBinding(javaScriptContextHolder);
 

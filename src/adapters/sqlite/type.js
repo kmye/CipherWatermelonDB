@@ -17,6 +17,7 @@ export type MigrationEvents = {
 
 export type SQLiteAdapterOptions = $Exact<{
   dbName?: string,
+  password: string,
   schema: AppSchema,
   migrations?: SchemaMigrations,
   // The new way to run the database in synchronous mode.
@@ -64,6 +65,7 @@ export type SyncReturn<T> =
   | { status: 'error', code: string, message: string }
 
 export type SqliteDispatcherOptions = $Exact<{
+  password: string,
   usesExclusiveLocking: boolean,
   experimentalUnsafeNativeReuse: boolean,
 }>

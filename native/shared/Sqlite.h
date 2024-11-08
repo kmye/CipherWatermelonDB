@@ -1,14 +1,18 @@
 #pragma once
 
-#include <string>
-#include <sqlite3.h>
+#import <string>
+#ifdef SQLITE_HAS_CODEC
+#import "sqlite3.h"
+#else
+#import <sqlite3.h>
+#endif
 
 namespace watermelondb {
 
 // Lightweight wrapper for handling sqlite3 lifetime
 class SqliteDb {
 public:
-    SqliteDb(std::string path);
+    SqliteDb(std::string path, const char *password);
     ~SqliteDb();
     void destroy();
 

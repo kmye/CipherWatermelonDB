@@ -26,19 +26,22 @@ var SQLiteAdapter = exports.default = /*#__PURE__*/function () {
       schema: schema,
       migrations: migrations,
       migrationEvents: migrationEvents,
+      password: password,
       usesExclusiveLocking = false,
       experimentalUnsafeNativeReuse = false
     } = options;
     this.schema = schema;
     this.migrations = migrations;
     this._migrationEvents = migrationEvents;
+    this.password = password;
     this.dbName = this._getName(dbName);
     this._dispatcherType = (0, _makeDispatcher.getDispatcherType)(options);
     // Hacky-ish way to create an object with NativeModule-like shape, but that can dispatch method
     // calls to async, synch NativeModule, or JSI implementation w/ type safety in rest of the impl
     this._dispatcher = (0, _makeDispatcher.makeDispatcher)(this._dispatcherType, this._tag, this.dbName, {
       usesExclusiveLocking: usesExclusiveLocking,
-      experimentalUnsafeNativeReuse: experimentalUnsafeNativeReuse
+      experimentalUnsafeNativeReuse: experimentalUnsafeNativeReuse,
+      password: this.password
     });
     if ('production' !== process.env.NODE_ENV) {
       (0, _common2.validateAdapter)(this);

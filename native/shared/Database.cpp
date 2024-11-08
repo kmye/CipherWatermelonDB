@@ -5,8 +5,9 @@ namespace watermelondb {
 using platform::consoleError;
 using platform::consoleLog;
 
-Database::Database(jsi::Runtime *runtime, std::string path, bool usesExclusiveLocking) : runtime_(runtime), mutex_() {
-    db_ = std::make_unique<SqliteDb>(path);
+Database::Database(jsi::Runtime *runtime, std::string path, std::string password, bool usesExclusiveLocking)
+: runtime_(runtime), mutex_() {
+    db_ = std::make_unique<SqliteDb>(path, password.c_str());
 
     std::string initSql = "";
 

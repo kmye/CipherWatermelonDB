@@ -15,6 +15,7 @@ export type MigrationEvents = {
 
 export type SQLiteAdapterOptions = $Exact<{
   dbName?: string
+  password: string
   schema: AppSchema
   migrations?: SchemaMigrations
   // The new way to run the database in synchronous mode.

@@ -44,9 +44,10 @@ var SqliteJsiDispatcher = /*#__PURE__*/function () {
   // debug hook for NT use
 
   function SqliteJsiDispatcher(dbName, {
-    usesExclusiveLocking: usesExclusiveLocking
+    usesExclusiveLocking: usesExclusiveLocking,
+    password: password
   }) {
-    this._db = global.nativeWatermelonCreateAdapter(dbName, usesExclusiveLocking);
+    this._db = global.nativeWatermelonCreateAdapter(dbName, password, usesExclusiveLocking);
     this._unsafeErrorListener = function () {};
   }
   var _proto2 = SqliteJsiDispatcher.prototype;

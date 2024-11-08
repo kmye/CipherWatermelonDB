@@ -32,7 +32,13 @@ Pod::Spec.new do |s|
 
   s.dependency "React"
 
-  s.libraries = 'sqlite3'
+  # use SQLCipher by default
+  print "Using encrypted DB\n"
+  s.xcconfig = {
+    'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SQLITE_HAS_CODEC=1',
+    'OTHER_CFLAGS' => '$(inherited) -DSQLITE_HAS_CODEC=1 -DSQLITE_TEMP_STORE=2',
+  }
+  s.dependency "SQLCipher"
 
   # NOTE: This dependency doesn't seem to be needed anymore (tested on RN 0.66, 0.71), file an issue
   # if this causes issues for you

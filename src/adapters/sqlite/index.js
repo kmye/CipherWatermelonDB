@@ -58,6 +58,8 @@ export default class SQLiteAdapter implements DatabaseAdapter {
 
   dbName: string
 
+  password: string
+
   _dispatcherType: DispatcherType
 
   _dispatcher: SqliteDispatcher
@@ -71,12 +73,14 @@ export default class SQLiteAdapter implements DatabaseAdapter {
       schema,
       migrations,
       migrationEvents,
+      password,
       usesExclusiveLocking = false,
       experimentalUnsafeNativeReuse = false,
     } = options
     this.schema = schema
     this.migrations = migrations
     this._migrationEvents = migrationEvents
+    this.password = password
     this.dbName = this._getName(dbName)
     this._dispatcherType = getDispatcherType(options)
     // Hacky-ish way to create an object with NativeModule-like shape, but that can dispatch method
@@ -84,6 +88,7 @@ export default class SQLiteAdapter implements DatabaseAdapter {
     this._dispatcher = makeDispatcher(this._dispatcherType, this._tag, this.dbName, {
       usesExclusiveLocking,
       experimentalUnsafeNativeReuse,
+      password: this.password,
     })
 
     if (process.env.NODE_ENV !== 'production') {

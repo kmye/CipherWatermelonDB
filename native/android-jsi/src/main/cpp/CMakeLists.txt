@@ -33,11 +33,11 @@ endif()
 # Header search paths
 # FIXME: <simdjson/simdjson.h> should work…
 
-set(SQLITE_VERSION sqlite-amalgamation-3460000)
+set(SQLITE_PATH ${NODE_MODULES_PATH_WM}@nozbe/watermelondb/native/sqlite-cipher-amalgamation/)
 
 include_directories(
         ../../../../shared
-        ${NODE_MODULES_PATH_WM}/@nozbe/sqlite/${SQLITE_VERSION}/
+        ${SQLITE_PATH}
         ${NODE_MODULES_PATH_WM}/@nozbe/simdjson/src/
         ${NODE_MODULES_PATH_RN}/react-native/React
         ${NODE_MODULES_PATH_RN}/react-native/React/Base
@@ -58,6 +58,10 @@ include_directories(
 #        -DFOLLY_NO_CONFIG=1
 #        -DFOLLY_HAVE_MEMRCHR=1
 #)
+add_definitions(
+        -DSQLITE_HAS_CODEC
+        -DSQLITE_TEMP_STORE=2
+)
 
 # simdjson is slow without optimization
 set(CMAKE_CXX_FLAGS_DEBUG "-Os") # comment out for JSI debugging
@@ -74,7 +78,8 @@ file(GLOB SHARED_SRC_FILES ../../../../shared/*.cpp)
 
 add_library(watermelondb-jsi SHARED
         # vendor files
-        ${NODE_MODULES_PATH_WM}/@nozbe/sqlite/${SQLITE_VERSION}/sqlite3.c
+        ${SQLITE_PATH}/sqlite3.c
+        ${SQLITE_PATH}/sqlite3.h
         ${NODE_MODULES_PATH_WM}/@nozbe/simdjson/src/simdjson.cpp
         # our sources
         ${ANDROID_JSI_SRC_FILES}
@@ -83,7 +88,12 @@ add_library(watermelondb-jsi SHARED
         # seems wrong to compile a file that's already getting compiled as part of the app, but ¯\_(ツ)_/¯
         ${NODE_MODULES_PATH_RN}/react-native/ReactCommon/jsi/jsi/jsi.cpp)
 
+find_package(openssl REQUIRED CONFIG)
+set(openSSLLib openssl::crypto openssl::ssl)
+
 target_link_libraries(watermelondb-jsi
                       # link with these libraries:
                       android
-                      log)
+                      log
+                      ${openSSLLib}
+                      )
